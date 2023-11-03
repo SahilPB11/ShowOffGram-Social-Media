@@ -16,13 +16,13 @@ import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { userCreteUserAccount, userUseSignInAccount } from "@/lib/react-query/queriesAndMutation";
-import { useUserContext } from "@/context/authConext";
+import { useUserContext } from "@/context/AuthConext";
 
 const SignUpForm = () => {
     const { toast } = useToast();
     const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
-    const { mutateAsync: createUserAccount, isLoading: isCreatingUser } = userCreteUserAccount();
-    const { mutateAsync: signInAccount, isLoading: isSigningIn } = userUseSignInAccount();
+    const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = userCreteUserAccount();
+    const { mutateAsync: signInAccount, isPending: isSigningIn } = userUseSignInAccount();
     const navigate = useNavigate();
 
     // 1. Define your form.
@@ -140,7 +140,7 @@ const SignUpForm = () => {
                         )}
                     />
                     <Button type="submit" className="shad-button_primary">
-                        {isCreatingUser ? (
+                        {isCreatingAccount ? (
                             <div className="flex-center gap-2">
                                 <Loader /> Loading...
                             </div>
@@ -151,7 +151,7 @@ const SignUpForm = () => {
                     <p className="text-small-regular text-light-2 text-center mt-2">
                         Already have an account?
                         <Link
-                            to="sign-in"
+                            to="/sign-in"
                             className="text-primary text-small-semibold ml-1"
                         >
                             Log in{" "}

@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from 'node_modules/@tanstack/react-query/build/legacy'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactNode } from 'react'
 
 const queryClient = new QueryClient();
