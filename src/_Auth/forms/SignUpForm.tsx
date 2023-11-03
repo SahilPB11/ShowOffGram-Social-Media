@@ -13,14 +13,17 @@ import { Button } from "@/components/ui/button";
 import { SignUpValiation } from "@/lib/validation";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { userCreteUserAccount, userUseSignInAccount } from "@/lib/react-query/queriesAndMutation";
+import { useUserContext } from "@/context/authConext";
 
 const SignUpForm = () => {
     const { toast } = useToast();
+    const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
     const { mutateAsync: createUserAccount, isLoading: isCreatingUser } = userCreteUserAccount();
     const { mutateAsync: signInAccount, isLoading: isSigningIn } = userUseSignInAccount();
+    const navigate = useNavigate();
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof SignUpValiation>>({
@@ -49,14 +52,23 @@ const SignUpForm = () => {
             email: values.email,
             password: values.password
         })
-         // here we are cheking if session not created the we are showing error in the form of toast
+        // here we are cheking if session not created the we are showing error in the form of toast
         if (!session) {
             return toast({
                 title: "Sign up failed. Please try again.",
             });
         }
 
-        
+        const isLoggedIn = await checkAuthUser();
+        if (isLoggedIn) {
+            form.reset();
+            navigate('/');
+        } else {
+            return toast({
+                title: "Sign up failed. Please try again.",
+            });
+        }
+
     }
 
     return (

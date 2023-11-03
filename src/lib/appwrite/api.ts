@@ -2,7 +2,7 @@ import {ID, Query} from "appwrite"
 import { INewUser } from "@/types";
 import { account, appwriteConfig, avatars, databases } from "./config";
 
-// reating account in auth
+// creating account in auth
 export async function createUserAccount(user: INewUser){
     try {
        const newAccount  = await account.create(
@@ -59,7 +59,7 @@ export async function signInAccount(user:{email: string, password: string} ){
         
     }
 }
-
+// here we ae getting the details about logdin user
 export async function getCurrentUser(){
     try {
       const currentAccount = await account.get();  

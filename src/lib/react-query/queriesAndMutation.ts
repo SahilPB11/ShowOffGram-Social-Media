@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tansta
 import { createUserAccount, signInAccount } from "../appwrite/api"
 import { INewUser } from "@/types"
 
+// here we are creating the user via react-query
 export const userCreteUserAccount = () => {
     return useMutation({
         mutationFn: (user: INewUser) => createUserAccount(user)

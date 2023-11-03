@@ -1,15 +1,15 @@
 import { getCurrentUser } from "@/lib/appwrite/api";
 import { IContextType, IUser } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 export const INITIAL_USER = {
     id: "",
-    name: '',
-    username: '',
-    email: '',
-    imageUrl: '',
-    bio: ''
-}
+    name: "",
+    username: "",
+    email: "",
+    imageUrl: "",
+    bio: "",
+};
 
 const INITIAL_STATE = {
     user: INITIAL_USER,
@@ -18,43 +18,56 @@ const INITIAL_STATE = {
     setUser: () => { },
     setIsAuthenticated: () => { },
     checkAuthUser: async () => false as boolean,
-}
+};
 
 const AuthConext = createContext<IContextType>(INITIAL_STATE);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<IUser>(INITIAL_USER)
-    const [iseLoading, setIsLoading] = useState(false);
+    const [user, setUser] = useState<IUser>(INITIAL_USER);
+    const [isLoading, setIsLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
     const checkAuthUser = async () => {
         try {
             const currectAccount = await getCurrentUser();
-            if(currectAccount) {
+            if (currectAccount) {
                 setUser({
                     id: currectAccount.$id,
                     name: currectAccount.name,
                     username: currectAccount.username,
                     email: currectAccount.email,
                     imageUrl: currectAccount.imageUrl,
-                    bio: currectAccount.bio 
-                })
+                    bio: currectAccount.bio,
+                });
+                setIsAuthenticated(true);
+                return true;
             }
+            return false;
         } catch (error) {
-           console.log(error);
-           return false;
-            finally{
-                setIsLoading(false);
-            }
+            console.log(error);
+            return false;
+        } finally {
+            setIsLoading(false);
         }
-     };
+    };
+    useEffect(() => {
+        if (
+            localStorage.getItem("cookieFallback") === "[]" ||
+            localStorage.getItem("cookieFallback") === null
+        ) navigate("/sign-in");
+        checkAuthUser();
+    }, []);
     const value = {
-        user, setUser,
-        iseLoading,
-        isAuthenticated, setIsAuthenticated,
-        checkAuthUser
-    }
+        user,
+        setUser,
+        isLoading,
+        isAuthenticated,
+        setIsAuthenticated,
+        checkAuthUser,
+    };
 
     return <AuthConext.Provider value={value}>{children}</AuthConext.Provider>;
 };
 
-export default authConext;
+export default AuthProvider;
+export const useUserContext = () => useContext(AuthConext);
