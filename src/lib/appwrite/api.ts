@@ -100,10 +100,10 @@ export async function createPost(post: INewPost){
        if(!uploadedFle) throw Error;
 
        // get file url
-       const fileUrl = getFilePreview(uploadedFle.$id);
+       const fileUrl = await getFilePreview(uploadedFle.$id);
        if(!fileUrl ) {
         // if something was corruted we are deleteing the previous file
-        deleteFile(uploadedFle.$id);
+        await deleteFile(uploadedFle.$id);
         throw Error;
        }
 
@@ -154,8 +154,9 @@ export async function UploadFile(file: File){
 export async function getFilePreview(fileId: string){
     try {
         const fileUrl= storage.getFilePreview(appwriteConfig.storageId,
-            fileId, 20000, 2000, "top", 100,
+            fileId, 2000, 2000, "top", 100,
             )
+            if (!fileUrl) throw Error;
             return fileUrl;
     } catch (error) {
         console.log(error);
