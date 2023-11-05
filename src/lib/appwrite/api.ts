@@ -100,7 +100,7 @@ export async function createPost(post: INewPost){
        if(!uploadedFle) throw Error;
 
        // get file url
-       const fileUrl = await getFilePreview(uploadedFle.$id);
+       const fileUrl =  getFilePreview(uploadedFle.$id);
        if(!fileUrl ) {
         // if something was corruted we are deleteing the previous file
         await deleteFile(uploadedFle.$id);
@@ -151,7 +151,7 @@ export async function UploadFile(file: File){
 }
 
 // to find the img format and we are checking the format of file like its size and format jpg or png or otheres also 
-export async function getFilePreview(fileId: string){
+export  function getFilePreview(fileId: string){
     try {
         const fileUrl= storage.getFilePreview(appwriteConfig.storageId,
             fileId, 2000, 2000, "top", 100,
@@ -184,4 +184,63 @@ export async function getRecentPosts(){
     )
     if(!posts) throw Error
     return posts
+}
+
+// update when we like 
+export async function likePost(postId: string , likesArray: string[]){
+    try {
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            postId,
+            {
+                likes: likesArray
+            }
+        )
+        if(!updatedPost) throw Error;
+
+        return updatedPost
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+// this is for save post functionality
+export async function savePost(postId: string , userId: string){
+    try {
+        const updatedPost = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+            ID.unique(),
+            {
+               user: userId,
+               post: postId
+            }
+        )
+        if(!updatedPost) throw Error;
+
+        return updatedPost
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+// this is for save post functionality
+export async function deleteSavedPost(savedRecordId: string){
+    try {
+        const statusCode = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+           savedRecordId,
+        )
+
+        if(!statusCode) throw Error;
+
+        return {status: "ok"}
+    } catch (error) {
+        console.log(error);
+        
+    }
 }
