@@ -327,3 +327,26 @@ export async function deletePost(postId : string, imageId : string){
         
     }
 }
+
+// doing infinite scroling and fetching the data
+export async function getInfinitePost({pageParam} : {pageParam: number}){
+    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10) ]
+    if(pageParam){
+        queries.push(Query.cursorAfter(pageParam.toString()));
+    }
+
+    try {
+        const post = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            queries
+        )
+        if(!post) throw Error
+        return post
+    } catch (error) {
+        console.log(error);
+        
+        
+    }
+
+}
