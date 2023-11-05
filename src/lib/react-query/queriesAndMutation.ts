@@ -36,3 +36,11 @@ export const useCreatePost = () => {
 
     })
 }
+
+// get recent post
+export const getRecentPost = () => {
+    return useQuery({
+        queryKey : [QUERY_KEYS.GET_RECENT_POSTS],
+        queryFn
+    })
+}
