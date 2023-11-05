@@ -176,7 +176,7 @@ export async function deleteFile(fileId: string){
 }
 
 // fetch the posts from database
-export async function getrecentPost(){
+export async function getRecentPosts(){
     const posts = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
