@@ -1,13 +1,27 @@
 import GridPostList from "@/components/shared/GridPostList";
+import Loader from "@/components/shared/Loader";
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input"
+import useDebounce from "@/hooks/useDebounce";
+import { useGetPost, useSearchPosts } from "@/lib/react-query/queriesAndMutation";
 import { useState } from "react";
 
 const Explore = () => {
+    const { data: posts, fetchNextPage, hasNextPage } = useGetPost();
+
     const [searchValue, setSearchValue] = useState('');
-    // const posts = [];
-    // const shouldshowSearchResults = searchValue !== '';
-    // const shouldShowPosts = !shouldshowSearchResults && posts?.pages.every((item) => item.documents.length === 0)
+    const deBounceValue = useDebounce(searchValue, 500);
+    const { data: searchedPosts, isFetching: isSearchfetching } = useSearchPosts(deBounceValue);
+    if (!posts) {
+        return (
+            <div className="flex-center w-full h-full">
+                <Loader />
+            </div>
+        )
+    }
+
+    const shouldshowSearchResults = searchValue !== '';
+    const shouldShowPosts = !shouldshowSearchResults && posts?.pages.every((item) => item.documents.length === 0)
 
     return (
         <div className="explore-container">
@@ -32,15 +46,18 @@ const Explore = () => {
                     <img src="/assets/icons/filter.svg" height={20} width={20} alt="filter" />
                 </div>
             </div>
-            {/* <div className="flex flex-wrap gap-9 w-full max-w-5xl">
+            <div className="flex flex-wrap gap-9 w-full max-w-5xl">
                 {shouldshowSearchResults ? (
-                    <SearchResults />
+                    <SearchResults
+                        isSearchfetching={isSearchfetching}
+                        searchedPosts={searchedPosts}
+                    />
                 ) : shouldShowPosts ? (
                     <p className="text-light-4 mt-10 text-center w-full">End Of Bottom</p>
                 ) : posts.pages.map((item, index) => (
                     <GridPostList key={`page-${index}`} posts={item.documents} />
                 ))}
-            </div> */}
+            </div>
         </div>
     )
 }
