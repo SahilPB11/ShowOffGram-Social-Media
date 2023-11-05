@@ -1,6 +1,6 @@
 import {ID, Query} from "appwrite"
-import { INewUser } from "@/types";
-import { account, appwriteConfig, avatars, databases } from "./config";
+import { INewPost, INewUser } from "@/types";
+import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
 // creating account in auth
 export async function createUserAccount(user: INewUser){
@@ -84,6 +84,90 @@ export async function signOutAccount(){
     try {
         const session = await account.deleteSession('current')
         return session;
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+// post function 
+// here we are cfeating a post
+export async function createPost(post: INewPost){
+    try {
+       // upload image to storage 
+       const uploadedFle = await UploadFile(post.file[0]);
+
+       if(!uploadedFle) throw Error;
+
+       // get file url
+       const fileUrl = getFilePreview(uploadedFle.$id);
+       if(!fileUrl ) {
+        // if something was corruted we are deleteing the previous file
+        deleteFile(uploadedFle.$id);
+        throw Error;
+       }
+
+       //convert tags into an array
+       const tags = post.tags?.replace(/ /g,'').split(',') || [];
+
+       // ready to save in database
+       const newPost = await databases.createDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        ID.unique(),
+       {
+        creator: post.userId,
+        caption: post.caption,
+        imageUrl: fileUrl,
+        imageId : uploadedFle.$id,
+        location: post.location,
+        tags: tags
+       }
+       )
+
+       if(!newPost){
+        await deleteFile(uploadedFle.$id);
+        throw Error;
+       }
+
+       return newPost;
+
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+// here we are uploading a image in storage bucket
+export async function UploadFile(file: File){
+    try {
+        const uploadedFle = await storage.createFile(appwriteConfig.storageId,
+            ID.unique(), file);
+            return uploadedFle;
+    } catch (error) {
+       console.log(error);
+        
+    }
+}
+
+// to find the img format and we are checking the format of file like its size and format jpg or png or otheres also 
+export async function getFilePreview(fileId: string){
+    try {
+        const fileUrl= storage.getFilePreview(appwriteConfig.storageId,
+            fileId, 20000, 2000, "top", 100,
+            )
+            return fileUrl;
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+// if something was corruted we are deleteing the previous file 
+export async function deleteFile(fileId: string){
+    try {
+        await storage.deleteFile(appwriteConfig.storageId, fileId);
+        return {status: 'ok'}
     } catch (error) {
         console.log(error);
         
