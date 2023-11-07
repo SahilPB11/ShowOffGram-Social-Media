@@ -318,7 +318,7 @@ export async function deletePost(postId : string, imageId : string){
         await databases.deleteDocument(
             appwriteConfig.databaseId,
             appwriteConfig.postCollectionId,
-            postId
+            postId,
         )
 
         return {status : "ok"}
@@ -330,7 +330,7 @@ export async function deletePost(postId : string, imageId : string){
 
 // doing infinite scroling and fetching the data
 export async function getInfinitePost({pageParam} : {pageParam: number}){
-    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10) ]
+    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(5) ]
     if(pageParam){
         queries.push(Query.cursorAfter(pageParam.toString()));
     }
