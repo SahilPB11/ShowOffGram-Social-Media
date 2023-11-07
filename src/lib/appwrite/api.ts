@@ -368,3 +368,19 @@ export async function searchedPosts(searchTerm : string){
     }
 
 }
+
+// get user by post id
+export async function getPostsByUserId(userId: string){
+    try {
+        const post = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            [Query.equal('creator', userId), Query.orderDesc("$createdAt")],
+        )
+        if(!post) throw Error;
+        return post;
+    } catch (error) {
+        console.log(error);
+        
+    }
+}

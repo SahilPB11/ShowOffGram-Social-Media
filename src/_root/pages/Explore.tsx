@@ -11,6 +11,7 @@ const Explore = () => {
     const { ref, inView } = useInView();
     const { data: posts, fetchNextPage, hasNextPage } = useGetPost();
 
+
     const [searchValue, setSearchValue] = useState('');
     const deBounceValue = useDebounce(searchValue, 500);
     const { data: searchedPosts, isFetching: isSearchfetching } = useSearchPosts(deBounceValue);
@@ -27,7 +28,7 @@ const Explore = () => {
     }
 
     const shouldshowSearchResults = searchValue !== '';
-    const shouldShowPosts = !shouldshowSearchResults && posts?.pages.every((item) => item?.documents?.length === 0)
+    const shouldShowPosts = !shouldshowSearchResults && posts?.pages?.every((item) => item?.documents?.length === 0)
 
     return (
         <div className="explore-container">
