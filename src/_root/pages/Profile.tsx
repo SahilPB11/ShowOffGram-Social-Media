@@ -102,7 +102,7 @@ const Profile = () => {
                     </Link>
 
                     {/* this is for liked posts */}
-                    <Link to={`/profile/${id}/liked-posts`} className={`profile-tab rounded-r-lg ${pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
+                    <Link to={`/profile/${id}/liked-post`} className={`profile-tab rounded-r-lg ${pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
                         }`}>
                         <img src={"/assets/icons/like.svg"} alt="like" width={20} height={20} />
                         Liked Posts
@@ -110,10 +110,11 @@ const Profile = () => {
                 </div>
             )}
 
+
             <Routes>
                 <Route index element={<GridPostList posts={currentUser?.posts} showUser={true} />} />
-                {currentUser.$id === user.id && (
-                    <Route path="/liked-posts" element={<LikedPosts />} />
+                {currentUser?.$id === user?.id && (
+                    <Route path="/liked-post" element={<LikedPosts />} />
                 )}
             </Routes>
             <Outlet />
