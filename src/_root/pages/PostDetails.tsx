@@ -126,18 +126,17 @@ const PostDetails = () => {
                 </div>
             )}
 
-            <div className=" w-full max-w-5xl">
+            <div className="w-full max-w-5xl ">
                 <hr className="border w-full border-dark-4/80" />
+
                 <h3 className="body-bold md:h3-bold w-full my-10">
                     More Related Posts
                 </h3>
-                <div className="flex flex-wrap w-full" style={{ height: "100vh" }}>
-                    {isFetchingUserPost || !relatedPosts ? (
-                        <Loader />
-                    ) : (
-                        <GridPostList posts={relatedPosts} />
-                    )}
-                </div>
+               {isFetchingUserPost || !relatedPosts ? (
+                    <Loader />
+                ) : (
+                    <GridPostList posts={relatedPosts} />
+                )}
             </div>
         </div>
     );
