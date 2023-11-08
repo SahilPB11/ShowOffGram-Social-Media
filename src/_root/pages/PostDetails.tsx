@@ -17,7 +17,6 @@ const PostDetails = () => {
     const { data: post, isPending } = useGetPostById(id || "");
     const { data: userPosts, isPending: isFetchingUserPost } =
         useGetPostsByUserId(post?.creator?.$id);
-    console.log(userPosts);
 
     const { user } = useUserContext();
     const { mutate: deletePost } = useDeletePost();
@@ -30,6 +29,20 @@ const PostDetails = () => {
     };
     return (
         <div className="post_details-container">
+            <div className="hidden md:flex max-w-5xl w-full">
+                <Button
+                    onClick={() => navigate(-1)}
+                    variant="ghost"
+                    className="shad-button_ghost">
+                    <img
+                        src={"/assets/icons/back.svg"}
+                        alt="back"
+                        width={24}
+                        height={24}
+                    />
+                    <p className="small-medium lg:base-medium">Back</p>
+                </Button>
+            </div>
             {isPending ? (
                 <Loader />
             ) : (
@@ -118,13 +131,13 @@ const PostDetails = () => {
                 <h3 className="body-bold md:h3-bold w-full my-10">
                     More Related Posts
                 </h3>
-               <div className="flex flex-wrap w-full" style={{height:"100vh"}}>
-               {isFetchingUserPost || !relatedPosts ? (
-                    <Loader />
-                ) : (
-                    <GridPostList posts={relatedPosts} />
-                )}
-               </div>
+                <div className="flex flex-wrap w-full" style={{ height: "100vh" }}>
+                    {isFetchingUserPost || !relatedPosts ? (
+                        <Loader />
+                    ) : (
+                        <GridPostList posts={relatedPosts} />
+                    )}
+                </div>
             </div>
         </div>
     );

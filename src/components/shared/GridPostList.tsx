@@ -1,6 +1,5 @@
 import { useUserContext } from '@/context/AuthConext'
 import { Models } from 'appwrite'
-import React from 'react'
 import { Link } from 'react-router-dom'
 import PostStats from './PostStats'
 
