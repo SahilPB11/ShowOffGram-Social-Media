@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query"
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePost, getPostById, getPostsByUserId, getRecentPosts, getUserById, likePost, savePost, searchedPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api"
-import { INewPost, INewUser, IUpdatePost } from "@/types"
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePost, getPostById, getPostsByUserId, getRecentPosts, getUserById, likePost, savePost, searchedPosts, signInAccount, signOutAccount, updatePost, updateUser } from "../appwrite/api"
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
 import { QUERY_KEYS } from "./querKeys"
 
 // here we are creating the user via react-query
@@ -134,7 +134,7 @@ export const useUpdatePost = () => {
         onSuccess : (data) => {
                 queryClient.invalidateQueries({
                   queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
-                });
+         });
         },
     })
 }
@@ -185,6 +185,7 @@ export const useGetPostsByUserId = (userId : string)=> {
     })
 }
 
+// here i am finding the User by its id
 export const useGetUserById = (userId: string) => {
     return useQuery({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, getUserById],
@@ -192,4 +193,21 @@ export const useGetUserById = (userId: string) => {
         enabled: !! userId
     })
 
+}
+
+// here i am updating the user Profile
+export const useUpdateuser = () =>{
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn : (user : IUpdateUser) =>  updateUser(user),
+        onSuccess : (data) => {
+                queryClient.invalidateQueries({
+                  queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+         });
+         queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+         })
+        },
+    })
 }
