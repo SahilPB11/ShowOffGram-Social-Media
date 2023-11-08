@@ -3,11 +3,7 @@ import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthConext";
-import {
-    useDeletePost,
-    useGetPostById,
-    useGetPostsByUserId,
-} from "@/lib/react-query/queriesAndMutation";
+import { useDeletePost, useGetPostById, useGetPostsByUserId, } from "@/lib/react-query/queriesAndMutation";
 import { multiFormatDateString } from "@/lib/utils";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -27,6 +23,7 @@ const PostDetails = () => {
         deletePost({ postId: post?.$id || "", imageId: post?.imageId });
         navigate(-1);
     };
+    //  in this page we are showing everything about post who creates that how many likes everything we are showing
     return (
         <div className="post_details-container">
             <div className="hidden md:flex max-w-5xl w-full">
@@ -132,7 +129,7 @@ const PostDetails = () => {
                 <h3 className="body-bold md:h3-bold w-full my-10">
                     More Related Posts
                 </h3>
-               {isFetchingUserPost || !relatedPosts ? (
+                {isFetchingUserPost || !relatedPosts ? (
                     <Loader />
                 ) : (
                     <GridPostList posts={relatedPosts} />

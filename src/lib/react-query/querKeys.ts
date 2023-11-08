@@ -1,4 +1,6 @@
 export enum QUERY_KEYS {
+  // for saving the caching buy giving unique keys
+
     // AUTH KEYS
     CREATE_USER_ACCOUNT = "createUserAccount",
   

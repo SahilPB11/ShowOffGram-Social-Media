@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-// https://codesandbox.io/s/react-query-debounce-ted8o?file=/src/useDebounce.js
+// this hook for debousing means my function will call after specific time when user will stop typing in a search input box so that after specific time i can call a function
 export default function useDebounce<T>(value: T, delay: number): T {
   // State and setters for debounced value
   const [debouncedValue, setDebouncedValue] = useState<T>(value);

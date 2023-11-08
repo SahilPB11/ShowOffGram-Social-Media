@@ -13,6 +13,7 @@ const LikedPosts = () => {
             </div>
         )
     }
+    //  this componet for showing only liked posts
     return (
         <>
             {currentUser?.liked.length === 0 && (

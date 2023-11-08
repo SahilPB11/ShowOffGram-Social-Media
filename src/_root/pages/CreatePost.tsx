@@ -1,6 +1,7 @@
 import PostForms from "@/components/forms/PostForms"
 
 const CreatePost = () => {
+    // this finction is for creating a new post
     return (
         <div className="flex flex-1">
             <div className="common-container">

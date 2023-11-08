@@ -58,7 +58,6 @@ export async function signInAccount(user: { email: string; password: string }) {
     }
 }
 // here we ae getting the details about logdin user
-
 export async function getAccount() {
     try {
         const currentAccount = await account.get();
@@ -68,6 +67,8 @@ export async function getAccount() {
         console.log(error);
     }
 }
+
+// getting the current user all details
 export async function getCurrentUser() {
     try {
         const currentAccount = await getAccount();
@@ -350,7 +351,7 @@ export async function getInfinitePost({ pageParam }: { pageParam: number }) {
     }
 }
 
-// search a posts
+// search a posts by search keywords
 export async function searchedPosts(searchTerm: string) {
     try {
         const post = await databases.listDocuments(

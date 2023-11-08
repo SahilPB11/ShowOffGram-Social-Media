@@ -13,6 +13,7 @@ const AllUsers = () => {
         return;
     }
     return (
+        // this page is showing all the users and using useCrad component for showing
         <div className="common-container">
             <div className="user-container">
                 <h2 className="h3-bold md:h2-bold text-left w-full">All Users</h2>

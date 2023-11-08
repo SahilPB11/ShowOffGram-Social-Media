@@ -32,7 +32,7 @@ const Profile = () => {
             </div>
         )
     }
-
+    // this is for showing profile page which would be user and also people
     return (
         <div className="profile-container">
             <div className="profile-inner_container">

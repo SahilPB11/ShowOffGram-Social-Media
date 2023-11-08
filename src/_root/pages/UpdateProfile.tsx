@@ -11,7 +11,7 @@ import Loader from "@/components/shared/Loader";
 
 import { ProfileValidation } from "@/lib/validation";
 import { useUserContext } from "@/context/AuthConext";
-import {  useGetUserById, useUpdateuser } from "@/lib/react-query/queriesAndMutation";
+import { useGetUserById, useUpdateuser } from "@/lib/react-query/queriesAndMutation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,7 @@ const UpdateProfile = () => {
         });
         return navigate(`/profile/${id}`);
     };
-
+    // this page for updating the profile
     return (
         <div className="flex flex-1">
             <div className="common-container">

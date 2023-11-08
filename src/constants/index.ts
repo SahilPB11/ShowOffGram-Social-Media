@@ -1,3 +1,6 @@
+
+// here all the link for side bar and bottome bar
+
 export const sidebarLinks = [
     {
       imgURL: "/assets/icons/home.svg",

@@ -30,6 +30,7 @@ const Explore = () => {
     const shouldshowSearchResults = searchValue !== '';
     const shouldShowPosts = !shouldshowSearchResults && posts?.pages?.every((item) => item?.documents?.length === 0)
 
+    // on this page we are shoeing all post by all uses also we have search input in that u can find specific post so here we are exploring
     return (
         <div className="explore-container">
             <div className="explore-inner_container">

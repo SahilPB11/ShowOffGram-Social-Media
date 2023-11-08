@@ -8,6 +8,7 @@ const EditPost = () => {
     const { data: post, isPending } = useGetPostById(id || '');
 
     if (isPending) return <Loader />
+    // this page is for editing the post or u can say upating the post
     return (
         <div className="flex flex-1">
             <div className="common-container">
