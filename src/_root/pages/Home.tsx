@@ -3,10 +3,34 @@ import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
 import { useGetRecentPost, useGetAllusers } from "@/lib/react-query/queriesAndMutation";
 import { Models } from "appwrite";
+import { useInView } from "react-intersection-observer";
+import React, { useEffect } from "react"
+
 
 const Home = () => {
-    const { data: posts, isPending: isPostLoading, isError: isErrorPost } = useGetRecentPost();
+    const { ref, inView } = useInView();
+
+    // const { data: posts, isPending: isPostLoading, isError: isErrorPost } = useGetRecentPost();
+
+    const { data: posts, fetchNextPage, hasNextPage, isPending: isPostLoading, isError: isErrorPost } = useGetRecentPost();
+
     const { data: AllUsers, isPending: isUsersPending, isError: isErrorUsers } = useGetAllusers();
+
+    // first fecth the pages data
+    let pagesData = posts?.pages?.filter((item) => item);
+    // here i am fetching the documents from from pagaData
+    let documenstData = pagesData?.map((item) => item?.documents);
+    // fetch All Posts
+    let allPosts = documenstData?.reduce((accum = [], currentValue) => [...accum, ...currentValue], [])
+
+    useEffect(() => {
+        console.log("hii");
+
+        if (inView && hasNextPage) {
+            fetchNextPage();
+        }
+    }, [inView]);
+
 
     if (isErrorPost || isErrorUsers) {
         return (
@@ -30,7 +54,7 @@ const Home = () => {
                         <Loader />
                     ) : (
                         <ul className="flex flex-col flex-1 gap-9 w-full">
-                            {posts?.documents.map((post: Models.Document) => (
+                            {allPosts?.map((post: Models.Document) => (
                                 <li key={post.$id} className="flex justify-center w-full">
                                     <PostCard post={post} />
                                 </li>
@@ -38,6 +62,11 @@ const Home = () => {
                         </ul>
                     )}
                 </div>
+                {hasNextPage && (
+                <div ref={ref} className="mt-10">
+                    <Loader />
+                </div>
+            )}
             </div>
 
             <div className="home-creators">
@@ -46,7 +75,7 @@ const Home = () => {
                     <Loader />
                 ) : (
                     <ul className="grid 2xl:grid-cols-2 gap-6">
-                        {AllUsers?.documents.map((creator) => (
+                        {AllUsers?.documents?.map((creator) => (
                             <li key={creator?.$id}>
                                 <UserCard user={creator} />
                             </li>
@@ -55,7 +84,9 @@ const Home = () => {
                 )}
             </div>
 
+         
         </div>
+        
     )
 }
 

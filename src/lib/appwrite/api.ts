@@ -186,14 +186,25 @@ export async function deleteFile(fileId: string) {
 }
 
 // fetch the posts from database
-export async function getRecentPosts() {
+export async function getRecentPosts({ pageParam }: { pageParam: number }) {
+    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(2)];
+    if (pageParam) {
+        queries.push(Query.cursorAfter(pageParam.toString()));
+    }
+    
+   try {
     const posts = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
-        [Query.orderDesc("$createdAt"), Query.limit(20)]
+        queries
     );
     if (!posts) throw Error;
+    
     return posts;
+   } catch (error) {
+    console.log(error);
+    
+   }
 }
 
 // update when we like
@@ -333,7 +344,7 @@ export async function deletePost(postId: string, imageId: string) {
 
 // doing infinite scroling and fetching the data
 export async function getInfinitePost({ pageParam }: { pageParam: number }) {
-    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(5)];
+    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(2)];
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
     }
@@ -345,6 +356,7 @@ export async function getInfinitePost({ pageParam }: { pageParam: number }) {
             queries
         );
         if (!post) throw Error;
+        
         return post;
     } catch (error) {
         console.log(error);
@@ -458,12 +470,7 @@ export async function updateUser(user: IUpdateUser) {
 
 // get users list
 export async function getAllusers() {
-    const queries: any[] = [Query.orderDesc("$createdAt")];
-
-    if (10) {
-        queries.push(Query.limit(10));
-    }
-
+    const queries: any[] =[Query.limit(10)];
     try {
         const user = await databases.listDocuments(
             appwriteConfig.databaseId,

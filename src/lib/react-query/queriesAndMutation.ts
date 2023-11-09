@@ -39,9 +39,16 @@ export const useCreatePost = () => {
 
 // get recent post
 export const useGetRecentPost = () => {
-    return useQuery({
+    return useInfiniteQuery({
         queryKey : [QUERY_KEYS.GET_RECENT_POSTS],
-        queryFn : getRecentPosts
+        queryFn :  getRecentPosts,
+        getNextPageParam: (lastPage) => {
+            
+            if(lastPage && lastPage?.documents?.length === 0) return null;
+
+            const lastid = lastPage?.documents[lastPage?.documents?.length - 1].$id;
+            return lastid;
+        },
     })
 }
 
