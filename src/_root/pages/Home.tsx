@@ -44,7 +44,7 @@ const Home = () => {
             </div>
         )
     }
-    //  here we are showing the posts and also uses on right side
+    //  here we are showing the posts and also uses on a right side
     return (
         <div className="flex flex-1">
             <div className="home-container">
