@@ -15,8 +15,8 @@ const TopBar = () => {
         <section className='topbar'>
             <div className="flex-between py-4 px-5">
                 <Link to="/" className='flex gap-3 items-center'>
-                    <img src="/assets/images/logo.svg" alt="logo" width={130} height={325} />
-
+                    <img src="/assets/images/logo7.svg" alt="logo" width={50} height={325} />
+                    <h2 className="h3-bold md:h2-bold text-left w-full">ShowfGram</h2>
                 </Link>
                 <div className="flex gap-4">
                     <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()} >

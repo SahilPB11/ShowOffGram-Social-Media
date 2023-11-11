@@ -17,13 +17,14 @@ const LeftSideBar = () => {
     return (
         <div className="leftsidebar">
             <div className="flex flex-col gap-11">
-                <Link to="/" className="flex gap-3 items-center">
+                <Link to="/" className="flex  items-center">
                     <img
-                        src="/assets/images/logo.svg"
+                        src="/assets/images/logo7.svg"
                         alt="logo"
-                        width={170}
+                        width={80}
                         height={36}
                     />
+                   <h2 className="h3-bold md:h2-bold text-left w-full">ShowfGram</h2>
                 </Link>
 
                 <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
