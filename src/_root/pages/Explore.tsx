@@ -56,14 +56,12 @@ const Explore = () => {
             </div>
             <div className="flex flex-wrap gap-9 w-full max-w-5xl">
                 {shouldshowSearchResults ? (
-                    <SearchResults
-                        isSearchfetching={isSearchfetching}
-                        searchedPosts={searchedPosts}
+                    <SearchResults isSearchfetching={isSearchfetching} searchedPosts={searchedPosts}
                     />
                 ) : shouldShowPosts ? (
                     <p className="text-light-4 mt-10 text-center w-full">End Of Bottom</p>
-                ) : posts.pages.map((item, index) => (
-                    <GridPostList key={`page-${index}`} posts={item?.documents} />
+                ) : (posts.pages ?? []).map((item, index) => (
+                    <GridPostList key={`page-${index}`} posts={item?.documents ?? []} />
                 ))}
             </div>
 

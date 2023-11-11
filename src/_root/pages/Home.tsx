@@ -15,7 +15,14 @@ const Home = () => {
     const { data: AllUsers, isPending: isUsersPending, isError: isErrorUsers } = useGetAllusers();
 
     // first fecth the pages data
-    const allPosts = posts?.pages.filter((item) => item)?.map((item) => item?.documents)?.reduce((accum = [], currentValue) => [...accum, ...currentValue], []);
+    const allPosts = posts?.pages
+        .filter((item) => item)
+        .map((item) => item?.documents as Models.Document[]) // Adjust the type here
+        .reduce((accum = [], currentValue) => [...accum, ...currentValue], []) ?? []; // use [] as a default value
+
+
+
+
 
     useEffect(() => {
 
@@ -53,6 +60,7 @@ const Home = () => {
                                 </li>
                             ))}
                         </ul>
+
                     )}
                 </div>
                 {hasNextPage && (

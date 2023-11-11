@@ -129,7 +129,7 @@ const Profile = () => {
                     <Route path="/liked-post" element={<LikedPosts />} />
                 )}
             </Routes>
-            {/* <Outlet /> */}
+            <Outlet />
 
             {hasNextPage && (
                 <div ref={ref} className="mt-10">

@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tansta
 import { createPost, createUserAccount, deletePost, deleteSavedPost, getAllusers, getCurrentUser, getInfinitePost, getPostById, getPostsByUserId, getProfileUserInfinitePosts, getRecentPosts, getUserById, likePost, savePost, searchedPosts, signInAccount, signOutAccount, updatePost, updateUser } from "../appwrite/api"
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
 import { QUERY_KEYS } from "./querKeys"
-import { useState } from "react"
+
 
 // here we are creating the user via react-query
 export const userCreteUserAccount = () => {
@@ -41,18 +41,17 @@ export const useCreatePost = () => {
 // get recent post
 export const useGetRecentPost = () => {
     return useInfiniteQuery({
-        queryKey : [QUERY_KEYS.GET_RECENT_POSTS],
-        queryFn :  getRecentPosts,
-        getNextPageParam: (lastPage) => {
-            
-            if(lastPage && lastPage?.documents?.length === 0) return null;
-
-            const lastid = lastPage?.documents[lastPage?.documents?.length - 1].$id;
-            return lastid;
-        },
-    })
-}
-
+      queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      queryFn: getRecentPosts,
+      initialPageParam: 0, // or some default page number
+      getNextPageParam: (lastPage) => {
+        if (lastPage && lastPage?.documents?.length === 0) return null;
+        const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
+        return Number(lastId); // or some logic to get the next page number from the last id
+      },
+    });
+  };
+  
 // useLikes post
 export const useLikePost = () => {
     const queryClient = useQueryClient();
@@ -164,17 +163,20 @@ export const useDeletePost = () => {
 // search infinite post 
 export const useGetPost = () => {
     return useInfiniteQuery({
-        queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-        queryFn: getInfinitePost,
-        getNextPageParam: (lastPage) => {
-            if(lastPage && lastPage?.documents?.length === 0) return null;
+      queryKey: [QUERY_KEYS.GET_INFINITE_POSTS] as const, // use as const to assert that the array is a constant tuple
+      queryFn: ({ pageParam }) => getInfinitePost({ pageParam: Number(pageParam) }),
+      initialPageParam: Number(""),
+      getNextPageParam: (lastPage) => {
+        if (lastPage && lastPage?.documents?.length === 0) return null;
+        const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
+        return lastId ? Number(lastId) : null;
+      },
+    });
+  };
 
-            const lastid = lastPage?.documents[lastPage?.documents?.length - 1].$id;
-            return lastid;
-        }
-    })
-}
-
+  
+  
+  
 // use search post 
 export const useSearchPosts = (searchTerm : string) => {
     return useQuery({
@@ -230,21 +232,16 @@ export const useGetAllusers = () => {
 
 // get profile user Posts
 export const useGetProfileUserInfinitePosts = (userId: string) => {
-    // const [cursor, setCursor] = useState<string | null>(null);
-  
     return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_PROFILE_QUERY_POSTS, userId],
       queryFn: ({ pageParam }) => getProfileUserInfinitePosts({ pageParam, userId }),
+      initialPageParam: "", // or some default cursor value
       getNextPageParam: (lastPage) => {
-        if (!lastPage || !lastPage.documents || lastPage.documents.length === 0) {
-          return null;
-        }
-  
+        if (!lastPage || !lastPage.documents || lastPage.documents.length === 0) return null;
         const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
-        
-        // setCursor(String(lastId));
-        
-        return String(lastId);
+        return String(lastId) as string | null;
       },
     });
   };
+  
+
