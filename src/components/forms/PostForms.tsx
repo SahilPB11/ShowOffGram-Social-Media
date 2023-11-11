@@ -11,7 +11,7 @@ import FileUploader from "../shared/FileUploader";
 import { PostValiation } from "@/lib/validation";
 import { Models } from "appwrite";
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutation";
-import { useUserContext } from "@/context/AuthConext";
+import { useUserContext } from "../../context/AuthConext";
 import { useToast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
 type PostFormProps = {

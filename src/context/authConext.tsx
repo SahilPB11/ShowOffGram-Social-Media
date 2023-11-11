@@ -30,6 +30,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
     const checkAuthUser = async () => {
         try {
+            setIsLoading(true);
             const currectAccount = await getCurrentUser();
             if (currectAccount) {
                 setUser({

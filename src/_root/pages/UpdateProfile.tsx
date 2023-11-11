@@ -10,7 +10,7 @@ import ProfileUploader from "@/components/shared/ProfileUploader";
 import Loader from "@/components/shared/Loader";
 
 import { ProfileValidation } from "@/lib/validation";
-import { useUserContext } from "@/context/AuthConext";
+import { useUserContext } from "../../context/AuthConext";
 import { useGetUserById, useUpdateuser } from "@/lib/react-query/queriesAndMutation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
