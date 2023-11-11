@@ -187,7 +187,7 @@ export async function deleteFile(fileId: string) {
 
 // fetch the posts from database
 export async function getRecentPosts({ pageParam }: { pageParam: number }) {
-    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(2)];
+    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(4)];
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
     }
@@ -344,7 +344,7 @@ export async function deletePost(postId: string, imageId: string) {
 
 // doing infinite scroling and fetching the data
 export async function getInfinitePost({ pageParam }: { pageParam: number }) {
-    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(2)];
+    const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(4)];
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
     }
@@ -485,3 +485,28 @@ export async function getAllusers() {
         console.log(error);
     }
 }
+
+// get profile user post infinite way
+export async function getProfileUserInfinitePosts({ pageParam, userId }: { pageParam: string | null; userId: string }) {
+    const queries: any[] = [Query.equal("creator", userId), Query.orderDesc("$updatedAt"), Query.limit(6)];
+  
+    if (pageParam) {
+      queries.push(Query.cursorAfter(pageParam.toString()));
+    }
+  
+    try {
+      const userProfilePosts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        queries
+      );
+  
+      if (!userProfilePosts) {
+        throw new Error("Failed to fetch user profile posts");
+      }  
+      return userProfilePosts;
+    } catch (error) {
+      console.error("Error fetching user profile posts:", error);
+      throw error; // Re-throw the error to be caught by the caller if needed
+    }
+  }

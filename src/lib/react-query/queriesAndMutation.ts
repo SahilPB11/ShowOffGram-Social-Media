@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query"
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getAllusers, getCurrentUser, getInfinitePost, getPostById, getPostsByUserId, getRecentPosts, getUserById, likePost, savePost, searchedPosts, signInAccount, signOutAccount, updatePost, updateUser } from "../appwrite/api"
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getAllusers, getCurrentUser, getInfinitePost, getPostById, getPostsByUserId, getProfileUserInfinitePosts, getRecentPosts, getUserById, likePost, savePost, searchedPosts, signInAccount, signOutAccount, updatePost, updateUser } from "../appwrite/api"
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
 import { QUERY_KEYS } from "./querKeys"
+import { useState } from "react"
 
 // here we are creating the user via react-query
 export const userCreteUserAccount = () => {
@@ -226,3 +227,24 @@ export const useGetAllusers = () => {
         queryFn: () => getAllusers()
     })
 }
+
+// get profile user Posts
+export const useGetProfileUserInfinitePosts = (userId: string) => {
+    // const [cursor, setCursor] = useState<string | null>(null);
+  
+    return useInfiniteQuery({
+      queryKey: [QUERY_KEYS.GET_PROFILE_QUERY_POSTS, userId],
+      queryFn: ({ pageParam }) => getProfileUserInfinitePosts({ pageParam, userId }),
+      getNextPageParam: (lastPage) => {
+        if (!lastPage || !lastPage.documents || lastPage.documents.length === 0) {
+          return null;
+        }
+  
+        const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
+        
+        // setCursor(String(lastId));
+        
+        return String(lastId);
+      },
+    });
+  };

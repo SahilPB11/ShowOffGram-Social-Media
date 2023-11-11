@@ -1,11 +1,12 @@
+import { useEffect } from "react"
 import { Route, Routes, Link, Outlet, useParams, useLocation, } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthConext";
-import { useGetUserById } from "@/lib/react-query/queriesAndMutation";
+import { useGetProfileUserInfinitePosts, useGetUserById } from "@/lib/react-query/queriesAndMutation";
 import Loader from "@/components/shared/Loader";
 import GridPostList from "@/components/shared/GridPostList";
 import LikedPosts from "./LikedPosts";
-
+import { useInView } from "react-intersection-observer";
 interface stateBlockProps {
     value: string | number;
     label: string;
@@ -19,11 +20,22 @@ const StatBlock = ({ value, label }: stateBlockProps) => (
 )
 
 const Profile = () => {
+    const { ref, inView } = useInView();
+
     const { id } = useParams();
     const { user } = useUserContext();
     const { pathname } = useLocation();
 
     const { data: currentUser } = useGetUserById(id || '');
+    const { data: userProfilePosts, fetchNextPage, hasNextPage } = useGetProfileUserInfinitePosts(id || '');
+    useEffect(() => {
+        if (inView && hasNextPage) {
+            fetchNextPage();
+        }
+    }, [inView, hasNextPage]);
+
+    // first fecth the pages data
+    const allPosts = userProfilePosts?.pages?.filter((item) => item)?.map((item) => item?.documents)?.reduce((accum = [], currentValue) => [...accum, ...currentValue]);
 
     if (!currentUser) {
         return (
@@ -48,7 +60,7 @@ const Profile = () => {
                                 {currentUser?.name}
                             </h1>
                             <p className="small-regular md:body-medium text-light-3 text-center xl:text-left">
-                                @{currentUser.username}
+                                @{currentUser?.username}
                             </p>
                         </div>
 
@@ -78,7 +90,7 @@ const Profile = () => {
                             </Link>
                         </div>
 
-                        <div className={`${user.id === id && "hidden"}`}>
+                        <div className={`${user?.id === id && "hidden"}`}>
                             <Button type="button" className="shad-button_primary px-8">
                                 Follow
                             </Button>
@@ -112,12 +124,18 @@ const Profile = () => {
 
 
             <Routes>
-                <Route index element={<GridPostList posts={currentUser?.posts} showUser={true} />} />
+                <Route index element={allPosts && <GridPostList posts={allPosts || []} showUser={true} />} />
                 {currentUser?.$id === user?.id && (
                     <Route path="/liked-post" element={<LikedPosts />} />
                 )}
             </Routes>
-            <Outlet />
+            {/* <Outlet /> */}
+
+            {hasNextPage && (
+                <div ref={ref} className="mt-10">
+                    <Loader />
+                </div>
+            )}
         </div>
     )
 }

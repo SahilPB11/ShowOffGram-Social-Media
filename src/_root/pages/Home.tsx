@@ -1,30 +1,23 @@
+import { useEffect } from "react"
 import Loader from "@/components/shared/Loader";
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
 import { useGetRecentPost, useGetAllusers } from "@/lib/react-query/queriesAndMutation";
 import { Models } from "appwrite";
 import { useInView } from "react-intersection-observer";
-import React, { useEffect } from "react"
 
 
 const Home = () => {
     const { ref, inView } = useInView();
-
-    // const { data: posts, isPending: isPostLoading, isError: isErrorPost } = useGetRecentPost();
 
     const { data: posts, fetchNextPage, hasNextPage, isPending: isPostLoading, isError: isErrorPost } = useGetRecentPost();
 
     const { data: AllUsers, isPending: isUsersPending, isError: isErrorUsers } = useGetAllusers();
 
     // first fecth the pages data
-    let pagesData = posts?.pages?.filter((item) => item);
-    // here i am fetching the documents from from pagaData
-    let documenstData = pagesData?.map((item) => item?.documents);
-    // fetch All Posts
-    let allPosts = documenstData?.reduce((accum = [], currentValue) => [...accum, ...currentValue], [])
+    const allPosts = posts?.pages.filter((item) => item)?.map((item) => item?.documents)?.reduce((accum = [], currentValue) => [...accum, ...currentValue], []);
 
     useEffect(() => {
-        console.log("hii");
 
         if (inView && hasNextPage) {
             fetchNextPage();
@@ -63,10 +56,10 @@ const Home = () => {
                     )}
                 </div>
                 {hasNextPage && (
-                <div ref={ref} className="mt-10">
-                    <Loader />
-                </div>
-            )}
+                    <div ref={ref} className="mt-10">
+                        <Loader />
+                    </div>
+                )}
             </div>
 
             <div className="home-creators">
@@ -84,9 +77,9 @@ const Home = () => {
                 )}
             </div>
 
-         
+
         </div>
-        
+
     )
 }
 
