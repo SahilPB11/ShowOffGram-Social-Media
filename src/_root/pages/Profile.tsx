@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Route, Routes, Link, Outlet, useParams, useLocation, } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useUserContext } from "../../context/AuthConext";
+import { useUserContext } from "./../../context/AuthConext";
 import { useGetProfileUserInfinitePosts, useGetUserById } from "@/lib/react-query/queriesAndMutation";
 import Loader from "@/components/shared/Loader";
 import GridPostList from "@/components/shared/GridPostList";
