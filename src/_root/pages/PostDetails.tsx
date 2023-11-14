@@ -23,7 +23,7 @@ const PostDetails = () => {
         deletePost({ postId: post?.$id || "", imageId: post?.imageId });
         navigate(-1);
     };
-    //  in this page we are showing everything about post who creates that how many likes everything we are showing
+    //  in this page we are showing everything about post who creates that how many likes everything we are showin
     return (
         <div className="post_details-container">
             <div className="hidden md:flex max-w-5xl w-full">
