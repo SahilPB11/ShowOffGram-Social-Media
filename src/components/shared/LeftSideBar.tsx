@@ -24,7 +24,7 @@ const LeftSideBar = () => {
                         width={80}
                         height={36}
                     />
-                   <h2 className="h3-bold md:h2-bold text-left w-full">ShowfGram</h2>
+                    <h2 className="h3-bold md:h2-bold text-left w-full">ShowfGram</h2>
                 </Link>
 
                 <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
