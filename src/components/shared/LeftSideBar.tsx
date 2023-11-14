@@ -26,7 +26,6 @@ const LeftSideBar = () => {
                     />
                     <h2 className="h3-bold md:h2-bold text-left w-full">ShowfGram</h2>
                 </Link>
-
                 <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
                     <img
                         src={user?.imageUrl || "assets/icons/profile-placeholder.svg"}
@@ -64,11 +63,7 @@ const LeftSideBar = () => {
                     })}
                 </ul>
             </div>
-            <Button
-                variant="ghost"
-                className="shad-button_ghost"
-                onClick={() => signOut}
-            >
+            <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()} >
                 <img src="/assets/icons/logout.svg" alt="logout" />
                 <p className="small-medium lg:base-medium">LogOut</p>
             </Button>
