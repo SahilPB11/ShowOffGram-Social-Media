@@ -2,7 +2,7 @@ import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
-import { useUserContext } from "./../../context/AuthConext";
+import { useUserContext } from "../../context/AuthContext";
 import { useDeletePost, useGetPostById, useGetPostsByUserId, } from "@/lib/react-query/queriesAndMutation";
 import { multiFormatDateString } from "@/lib/utils";
 import { Link, useNavigate, useParams } from "react-router-dom";

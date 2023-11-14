@@ -1,4 +1,4 @@
-import { useUserContext } from './../../context/AuthConext';
+import { useUserContext } from '../../context/AuthContext';
 import { multiFormatDateString } from '@/lib/utils';
 import { Models } from 'appwrite'
 import { Link } from 'react-router-dom';
