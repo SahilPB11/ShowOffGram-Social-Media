@@ -43,11 +43,11 @@ export const useGetRecentPost = () => {
     return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       queryFn: getRecentPosts,
-      initialPageParam: 0, // or some default page number
+      initialPageParam: "", // or some default page number
       getNextPageParam: (lastPage) => {
         if (lastPage && lastPage?.documents?.length === 0) return null;
         const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
-        return Number(lastId); // or some logic to get the next page number from the last id
+        return String(lastId); // or some logic to get the next page number from the last id
       },
     });
   };

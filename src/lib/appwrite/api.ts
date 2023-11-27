@@ -186,7 +186,7 @@ export async function deleteFile(fileId: string) {
 }
 
 // fetch the posts from database
-export async function getRecentPosts({ pageParam }: { pageParam: number }) {
+export async function getRecentPosts({ pageParam }: { pageParam: String }) {
     const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(4)];
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
@@ -344,7 +344,6 @@ export async function deletePost(postId: string, imageId: string) {
 
 // doing infinite scroling and fetching the data
 export async function getInfinitePost({ pageParam }: { pageParam: string }) {
-    console.log(pageParam);    
     const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(6)];
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
