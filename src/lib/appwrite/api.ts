@@ -343,12 +343,12 @@ export async function deletePost(postId: string, imageId: string) {
 }
 
 // doing infinite scroling and fetching the data
-export async function getInfinitePost({ pageParam }: { pageParam: number }) {
+export async function getInfinitePost({ pageParam }: { pageParam: string }) {
+    console.log(pageParam);    
     const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(6)];
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()));
     }
-
     try {
         const post = await databases.listDocuments(
             appwriteConfig.databaseId,
@@ -489,6 +489,7 @@ export async function getAllusers() {
 // get profile user post infinite way
 export async function getProfileUserInfinitePosts({ pageParam, userId }: { pageParam: string | null; userId: string }) {
     const queries: any[] = [Query.equal("creator", userId), Query.orderDesc("$updatedAt"), Query.limit(6)];
+  console.log(pageParam);
   
     if (pageParam) {
       queries.push(Query.cursorAfter(pageParam.toString()));

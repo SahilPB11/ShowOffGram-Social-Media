@@ -163,20 +163,16 @@ export const useDeletePost = () => {
 // search infinite post 
 export const useGetPost = () => {
     return useInfiniteQuery({
-      queryKey: [QUERY_KEYS.GET_INFINITE_POSTS] as const, // use as const to assert that the array is a constant tuple
-      queryFn: ({ pageParam }) => getInfinitePost({ pageParam: Number(pageParam) }),
-      initialPageParam: Number(""),
+      queryKey: [QUERY_KEYS.GET_INFINITE_POSTS] , // use as const to assert that the array is a constant tuple
+      queryFn: ({ pageParam = 0 }) => getInfinitePost({ pageParam: String(pageParam) }),
+      initialPageParam:"",
       getNextPageParam: (lastPage) => {
-        if (lastPage && lastPage?.documents?.length === 0) return null;
+        if (!lastPage || !lastPage.documents ||lastPage?.documents?.length === 0) return null;
         const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
-        return lastId ? Number(lastId) : null;
+        return String(lastId);
       },
     });
   };
-
-  
-  
-  
 // use search post 
 export const useSearchPosts = (searchTerm : string) => {
     return useQuery({

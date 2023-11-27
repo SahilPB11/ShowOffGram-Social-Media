@@ -19,8 +19,7 @@ const Home = () => {
         .filter((item) => item)
         .map((item) => item?.documents as Models.Document[]) // Adjust the type here
         .reduce((accum = [], currentValue) => [...accum, ...currentValue], []) ?? []; // use [] as a default value
-
-
+ 
 
 
 
@@ -63,6 +62,7 @@ const Home = () => {
 
                     )}
                 </div>
+                
                 {hasNextPage && (
                     <div ref={ref} className="mt-10">
                         <Loader />
