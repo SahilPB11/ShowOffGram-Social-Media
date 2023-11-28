@@ -71,6 +71,14 @@ const SignInForm = () => {
                 <p className="text-light-3 small-medium md:base-regular mt-2">
                     Welcome Back! Please Enter Your Details
                 </p>
+               <div className="text-black bg-white small-medium md:base-regular mt-2">
+               <p >
+                Login with : garg05@gmail.com 
+                </p>
+                <p>
+                    Password: 123456789
+                </p>
+               </div>
 
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
