@@ -173,6 +173,7 @@ export const useGetPost = () => {
       },
     });
   };
+  
 // use search post 
 export const useSearchPosts = (searchTerm : string) => {
     return useQuery({
